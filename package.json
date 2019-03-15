@@ -1,0 +1,39 @@
+{
+  "name": "discovery-swarm-web",
+  "version": "1.0.0",
+  "description": "Abstracts away discovery-swarm interaction with WebRTC and a websocket gateway.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": "bin.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RangerMauve/discovery-swarm-web.git"
+  },
+  "keywords": [
+    "discovery",
+    "swarm",
+    "web",
+    "browser",
+    "dat"
+  ],
+  "author": "rangermauve",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RangerMauve/discovery-swarm-web/issues"
+  },
+  "homepage": "https://github.com/RangerMauve/discovery-swarm-web#readme",
+  "dependencies": {
+    "@geut/discovery-swarm-webrtc": "^1.2.0",
+    "dat-swarm-defaults": "^1.0.2",
+    "discovery-swarm-stream": "^1.0.0",
+    "signalhubws": "^1.0.10",
+    "websocket-stream": "^5.1.2",
+    "yargs": "^13.2.2"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "hyperdrive": "^9.14.2"
+  }
+}
