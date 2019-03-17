@@ -16,6 +16,12 @@ const swarm = new DiscoverySwarmWeb({
 swarm.join(archive.discoveryKey)
 ```
 
+## How it works
+
+Under the hood it uses [@geut/discovery-swarm-webrtc](https://www.npmjs.com/package/@geut/discovery-swarm-webrtc) to find WebRTC peers for channels, and uses [discovery-swarm-stream](https://www.npmjs.com/package/discovery-swarm-stream) over a websocket to bridge to the rest of the Dat network by using [discovery-swarm](https://www.npmjs.com/package/discovery-swarm) along with the [dat-swarm-defaults](https://www.npmjs.com/package/dat-swarm-defaults) configuration.
+
+A websocket gets created for signaling WebRTC peers, and another one gets created to proxy connections from the P2P network.
+
 ## API
 
 ### `new DiscoverySwarmWeb(opts)`
@@ -51,7 +57,8 @@ discovery-swarm-web --port 3472
 ## Roadmap:
 
 - [ ] Attempt to connect to a local discovery instance before the internet
-- [ ] Generate ID if one is not provided
+- [x] Generate ID if one is not provided
+- [ ] Auto-reconnect logic to discover-swarm-stream websocket
 - [ ] Require "handshake" event (id, topic)
 - [ ] Emit the `connection` event
 - [ ] Disconnect peers with known ID

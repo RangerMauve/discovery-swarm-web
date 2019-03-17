@@ -2,6 +2,7 @@ const signalhubws = require('signalhubws')
 const webrtcSwarm = require('@geut/discovery-swarm-webrtc')
 const DSS = require('discovery-swarm-stream/client')
 const websocket = require('websocket-stream')
+const crypto = require('crypto')
 
 const EventEmitter = require('events')
 
@@ -18,12 +19,14 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
     const signalhubURL = opts.signalhub || DEFAULT_SIGNALHUB
     const discoveryURL = opts.discovery || DEFAULT_DISCOVERY
 
-    const id = opts.id
+    const id = opts.id || crypto.randomBytes(32)
     const stream = opts.stream
 
     const isInstance = (typeof signalhubURL === 'object' && !Array.isArray(signalhubURL))
     const hub = isInstance
       ? signalhubURL : signalhubws(APP_NAME, signalhubURL.map(setSecure))
+
+    this.channels = new Set()
 
     this.hub = hub
 
@@ -36,11 +39,23 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
   }
 
   join (channelName, opts = {}) {
+    const channelNameString = channelName.toString('hex')
+
+    if(this.channels.has(channelNameString)) return
+
+    this.channels.add(channelNameString)
+
     this.webrtc.join(channelName, opts)
     this.dss.join(channelName, opts)
   }
 
   leave (channelName, opts = {}) {
+    const channelNameString = channelName.toString('hex')
+
+    if(!this.channels.has(channelNameString)) return
+
+    this.channels.delete(channelNameString)
+
     this.webrtc.leave(channelName, opts)
     this.dss.leave(channelName, opts)
   }
