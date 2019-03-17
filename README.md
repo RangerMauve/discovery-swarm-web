@@ -40,7 +40,7 @@ Close the swarm: closes all connections to peers, to the discovery server, and t
 
 ## CLI
 
-You can start your own gateway for added performance and privacy using the CLI, or if you want to host one for an application you're building.
+You can start your own gateway for added performance and privacy using the CLI, or if you want to host one for an application you're building. By default it will listen on TCP 3472 (DISC), but that can be changed with the `--port` flag.
 
 ```shell
 npm install -g discovery-swarm-web

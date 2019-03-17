@@ -23,7 +23,7 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
 
     const isInstance = (typeof signalhubURL === 'object' && !Array.isArray(signalhubURL))
     const hub = isInstance
-      ? signalhubURL : signalhubws(APP_NAME, setSecure(signalhubURL))
+      ? signalhubURL : signalhubws(APP_NAME, signalhubURL.map(setSecure))
 
     this.hub = hub
 

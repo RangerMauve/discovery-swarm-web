@@ -12,8 +12,7 @@ archive.ready(loadSwarm)
 
 function loadSwarm () {
   const swarm = new DiscoverySwarmWeb({
-    stream: replicate,
-    discovery: 'ws://localhost:3472'
+    stream: replicate
   })
 
   swarm.join(archive.discoveryKey)

@@ -1,6 +1,6 @@
 {
   "name": "discovery-swarm-web",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Abstracts away discovery-swarm interaction with WebRTC and a websocket gateway.",
   "main": "index.js",
   "scripts": {
