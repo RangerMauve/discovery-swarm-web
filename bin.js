@@ -6,7 +6,7 @@ const DEFAULT_PORT = 3472
 
 const argv = require('yargs').argv
 
-let port = argv.port || require('yargs')
+let port = argv.port || DEFAULT_PORT
 
 const server = http.createServer()
 
@@ -15,3 +15,5 @@ DiscoverySwarmWebServer.createServer({
 })
 
 server.listen(port)
+
+console.log('discovery-swarm-web server running on port', port)

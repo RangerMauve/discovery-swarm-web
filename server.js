@@ -7,7 +7,7 @@ const SWARM_OPTS = defaults({
 })
 
 module.exports = {
-  createServer(opts) {
+  createServer (opts) {
     const dss = new DSS(SWARM_OPTS)
 
     websocket.createServer(opts, (stream) => {

@@ -62,3 +62,6 @@ typings/
 
 # Ignore package lock
 package-lock.json
+
+# Ignore the example bundle
+bundle.js

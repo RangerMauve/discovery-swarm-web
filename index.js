@@ -9,6 +9,9 @@ const DEFAULT_SIGNALHUB = ['wss://signalhubws.mauve.moe']
 const DEFAULT_DISCOVERY = 'wss://discoveryswarm.mauve.moe'
 const APP_NAME = 'discovery-swarm-web'
 
+// Check if the page was loaded from HTTPS
+const IS_SECURE = self.location.href.startsWith('https')
+
 module.exports = class DiscoverySwarmWeb extends EventEmitter {
   constructor (opts = {}) {
     super()
@@ -20,7 +23,7 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
 
     const isInstance = (typeof signalhubURL === 'object' && !Array.isArray(signalhubURL))
     const hub = isInstance
-      ? signalhubURL : signalhubws(APP_NAME, signalhubURL)
+      ? signalhubURL : signalhubws(APP_NAME, setSecure(signalhubURL))
 
     this.hub = hub
 
@@ -28,7 +31,7 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
       id, stream, hub
     })
     this.dss = new DiscoverySwarmStreamWebsocket({
-      id, stream, discoveryURL
+      id, stream, discovery: setSecure(discoveryURL)
     })
   }
 
@@ -64,5 +67,25 @@ class DiscoverySwarmStreamWebsocket extends DSS {
       connection,
       stream
     })
+  }
+}
+
+function setSecure (url) {
+  if (IS_SECURE) {
+    if (url.startsWith('http:')) {
+      return 'https:' + url.slice(6)
+    } else if (url.startsWith('ws:')) {
+      return 'wss:' + url.slice(3)
+    } else {
+      return url
+    }
+  } else {
+    if (url.startsWith('https:')) {
+      return 'http:' + url.slice(7)
+    } else if (url.startsWith('wss:')) {
+      return 'ws:' + url.slice(4)
+    } else {
+      return url
+    }
   }
 }
