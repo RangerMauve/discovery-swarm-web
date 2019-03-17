@@ -1,13 +1,15 @@
 {
   "name": "discovery-swarm-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Abstracts away discovery-swarm interaction with WebRTC and a websocket gateway.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-example": "browserify example/index.js > example/bundle.js"
   },
-  "bin": "bin.js",
+  "bin": {
+    "discovery-swarm-web": "bin.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RangerMauve/discovery-swarm-web.git"
