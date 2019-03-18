@@ -17,13 +17,20 @@ function loadSwarm () {
 
   swarm.join(archive.discoveryKey)
 
-  archive.readFile('/about/index.html', 'utf-8', (err, data) => {
-    if (err) throw err
-    document.body.innerHTML = data
+  archive.metadata.update(() => {
+    console.log('Metadata loaded')
+    archive.readFile('/about/index.html', 'utf-8', (err, data) => {
+      if (err) throw err
+      document.body.innerHTML = data
+    })
+  })
+
+  swarm.on('connection', (connection, info) => {
+    console.log('Got connection', info)
   })
 }
 
-function replicate () {
+function replicate (info) {
   return archive.replicate({
     live: true
   })

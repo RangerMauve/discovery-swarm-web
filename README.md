@@ -56,11 +56,12 @@ discovery-swarm-web --port 3472
 
 ## Roadmap:
 
-- [ ] Attempt to connect to a local discovery instance before the internet
+- [x] Attempt to connect to a local discovery instance before the internet
 - [x] Generate ID if one is not provided
 - [x] Auto-reconnect logic to discover-swarm-stream websocket
 - [x] Emit the `connection` event
-- [ ] Disconnect peers with known ID
+- [x] Have limits for the number of connections made for a given channel (auto-close new connections after reaching it)
+  - [ ] Resolve bugs with close event not firing
 - [ ] Don't join discovery for a key unless you get no WebRTC peers (then join after a delay)
+- [ ] Disconnect peers with known ID
 - [ ] Make `stream` optional with a default handshake function
-- [ ] Have limits for the number of connections made for a given channel (auto-close new connections after reaching it)

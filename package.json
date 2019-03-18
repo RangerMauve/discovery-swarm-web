@@ -30,7 +30,7 @@
   "dependencies": {
     "@geut/discovery-swarm-webrtc": "github:geut/discovery-swarm-webrtc#sub-signalhub",
     "dat-swarm-defaults": "^1.0.2",
-    "discovery-swarm-stream": "^1.0.0",
+    "discovery-swarm-stream": "^1.1.2",
     "signalhubws": "^1.0.10",
     "websocket-stream": "^5.1.2",
     "yargs": "^13.2.2"
