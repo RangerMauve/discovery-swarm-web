@@ -36,6 +36,9 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
     this.dss = new DiscoverySwarmStreamWebsocket({
       id, stream, discovery: setSecure(discoveryURL)
     })
+
+    this.webrtc.on('connection', (conn, info) => this.emit('connection', conn, info))
+    this.dss.on('connection', (conn, info) => this.emit('connection', conn, info))
   }
 
   join (channelName, opts = {}) {
@@ -81,6 +84,11 @@ class DiscoverySwarmStreamWebsocket extends DSS {
     super({
       connection,
       stream
+    })
+
+    this.on('disconnected', () => {
+      const connection = websocket(discovery)
+      this.reconnect(connection)
     })
   }
 }

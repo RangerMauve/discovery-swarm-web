@@ -58,9 +58,8 @@ discovery-swarm-web --port 3472
 
 - [ ] Attempt to connect to a local discovery instance before the internet
 - [x] Generate ID if one is not provided
-- [ ] Auto-reconnect logic to discover-swarm-stream websocket
-- [ ] Require "handshake" event (id, topic)
-- [ ] Emit the `connection` event
+- [x] Auto-reconnect logic to discover-swarm-stream websocket
+- [x] Emit the `connection` event
 - [ ] Disconnect peers with known ID
 - [ ] Don't join discovery for a key unless you get no WebRTC peers (then join after a delay)
 - [ ] Make `stream` optional with a default handshake function
