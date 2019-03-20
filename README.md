@@ -29,8 +29,8 @@ A websocket gets created for signaling WebRTC peers, and another one gets create
 `opts` include:
   - `stream`: The only required field. Return a stream to handle an incoming connection
   - `id`: The ID you want to use to show up in the swarm
-  - `signalhub`: Either a URL for a [signalhubws](https://www.npmjs.com/package/signalhubws) server used for WebRTC signaling, or an object that has the same interface as [signalhub](https://www.npmjs.com/package/signalhub). Uses [signalhubws.mauve.moe](wss://signalhubws.mauve.moe) by default. Note that each signalhub server creates a new WebRTC swarm.
-  - `discovery`: A `discovery-swarm-web` server URl to connect to. By default it uses [discoveryswarm.mauve.moe](wss://discoveryswarm.mauve.moe). All discovery servers reach out to the same P2P network.
+  - `signalhub`: Either a URL for a [signalhubws](https://www.npmjs.com/package/signalhubws) server used for WebRTC signaling, or an object that has the same interface as [signalhub](https://www.npmjs.com/package/signalhub). Uses [signalhubws.mauve.moe](wss://signalhubws.mauve.moe) by default. Note that each signalhub server creates a new WebRTC swarm, so you probably shouldn't change this.
+  - `discovery`: A `discovery-swarm-web` server URl to connect to. By default it uses [discoveryswarm.mauve.moe](wss://discoveryswarm.mauve.moe), please supply your own if you're deploying to production. All discovery servers reach out to the same P2P network.
 
 ### `swarm.join(key)`
 
@@ -61,7 +61,7 @@ discovery-swarm-web --port 3472
 - [x] Auto-reconnect logic to discover-swarm-stream websocket
 - [x] Emit the `connection` event
 - [x] Have limits for the number of connections made for a given channel (auto-close new connections after reaching it)
-  - [ ] Resolve bugs with close event not firing
-- [ ] Don't join discovery for a key unless you get no WebRTC peers (then join after a delay)
+  - [x] Resolve bugs with close event not firing
+- [x] Don't join discovery for a key unless you get no WebRTC peers (then join after a delay)
 - [ ] Disconnect peers with known ID
 - [ ] Make `stream` optional with a default handshake function

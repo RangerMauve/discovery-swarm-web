@@ -10,7 +10,9 @@ const DEFAULT_SIGNALHUB = ['wss://signalhubws.mauve.moe']
 const DEFAULT_DISCOVERY = 'wss://discoveryswarm.mauve.moe'
 const LOCALHOST_DISCOVERY = 'ws://localhost:3472'
 const APP_NAME = 'discovery-swarm-web'
-const DEFAULT_MAX_CONNECTIONS = 3
+const DEFAULT_MAX_CONNECTIONS = Infinity
+const JOIN_DELAY = 2000
+const SYNC_NET_DELAY = 5000
 
 // Check if the page was loaded from HTTPS
 const IS_SECURE = self.location.href.startsWith('https')
@@ -60,14 +62,23 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
       connection.end()
     } else {
       this.channels.set(channelNameString, currentCount + 1)
-      connection.once('close', () => {
+
+      let hasClosed = false
+      const handleClose = () => {
+        if(hasClosed) return
+        hasClosed = true
+        if(!this.channels.has(channelNameString)) return
         const count = this.channels.get(channelNameString)
         this.channels.set(channelNameString, count - 1)
         if(!count) {
           this.leave(channelNameString)
           this.join(channelNameString)
         }
-      })
+      }
+
+      connection.once('close', handleClose)
+      connection.once('error', handleClose)
+
       this.emit('connection', connection, info)
     }
   }
@@ -80,7 +91,25 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
     this.channels.set(channelNameString, 0)
 
     this.webrtc.join(channelName, opts)
-    this.dss.join(channelName, opts)
+
+    const joinDSS = () => {
+      if(!this.channels.has(channelNameString)) return
+      this.removeListener('connection', handleJoined)
+      this.dss.join(channelName, opts)
+    }
+
+    const handleJoined = (connection, info) => {
+      if(info.channel.toString('hex') !== channelNameString) return
+      this.removeListener('connection', handleJoined)
+      clearTimeout(connectTimer)
+      connectTimer = setTimeout(joinDSS, SYNC_NET_DELAY)
+    }
+
+    // Wait a bit for WebRTC connections to come in before connecting to the gateway
+    // This will make it more likely that any initial sync would happen over WebRTC
+    let connectTimer = setTimeout(joinDSS, JOIN_DELAY)
+
+    this.on('connection', handleJoined)
   }
 
   leave (channelName, opts = {}) {

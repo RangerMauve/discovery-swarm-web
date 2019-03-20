@@ -15,12 +15,16 @@ function loadSwarm () {
     stream: replicate
   })
 
+  console.log('Joining', archive.discoveryKey.toString('hex'))
   swarm.join(archive.discoveryKey)
 
   archive.metadata.update(() => {
     console.log('Metadata loaded')
+
+    archive.readdir('/', console.log)
     archive.readFile('/about/index.html', 'utf-8', (err, data) => {
       if (err) throw err
+      console.log('Loaded data', data)
       document.body.innerHTML = data
     })
   })

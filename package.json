@@ -1,6 +1,6 @@
 {
   "name": "discovery-swarm-web",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Abstracts away discovery-swarm interaction with WebRTC and a websocket gateway.",
   "main": "index.js",
   "scripts": {
@@ -30,7 +30,7 @@
   "dependencies": {
     "@geut/discovery-swarm-webrtc": "github:geut/discovery-swarm-webrtc#sub-signalhub",
     "dat-swarm-defaults": "^1.0.2",
-    "discovery-swarm-stream": "^1.1.2",
+    "discovery-swarm-stream": "^1.1.4",
     "signalhubws": "^1.0.10",
     "websocket-stream": "^5.1.2",
     "yargs": "^13.2.2"
