@@ -58,19 +58,19 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
     const channelNameString = info.channel.toString('hex')
     const currentCount = this.channels.get(channelNameString)
 
-    if(currentCount >= this.maxConnections) {
+    if (currentCount >= this.maxConnections) {
       connection.end()
     } else {
       this.channels.set(channelNameString, currentCount + 1)
 
       let hasClosed = false
       const handleClose = () => {
-        if(hasClosed) return
+        if (hasClosed) return
         hasClosed = true
-        if(!this.channels.has(channelNameString)) return
+        if (!this.channels.has(channelNameString)) return
         const count = this.channels.get(channelNameString)
         this.channels.set(channelNameString, count - 1)
-        if(!count) {
+        if (!count) {
           this.leave(channelNameString)
           this.join(channelNameString)
         }
@@ -86,20 +86,20 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
   join (channelName, opts = {}) {
     const channelNameString = channelName.toString('hex')
 
-    if(this.channels.has(channelNameString)) return
+    if (this.channels.has(channelNameString)) return
 
     this.channels.set(channelNameString, 0)
 
     this.webrtc.join(channelName, opts)
 
     const joinDSS = () => {
-      if(!this.channels.has(channelNameString)) return
+      if (!this.channels.has(channelNameString)) return
       this.removeListener('connection', handleJoined)
       this.dss.join(channelName, opts)
     }
 
     const handleJoined = (connection, info) => {
-      if(info.channel.toString('hex') !== channelNameString) return
+      if (info.channel.toString('hex') !== channelNameString) return
       this.removeListener('connection', handleJoined)
       clearTimeout(connectTimer)
       connectTimer = setTimeout(joinDSS, SYNC_NET_DELAY)
@@ -115,7 +115,7 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
   leave (channelName, opts = {}) {
     const channelNameString = channelName.toString('hex')
 
-    if(!this.channels.has(channelNameString)) return
+    if (!this.channels.has(channelNameString)) return
 
     this.channels.delete(channelNameString)
 
@@ -142,24 +142,29 @@ class DiscoverySwarmStreamWebsocket extends DSS {
 
     const connection = websocket(LOCALHOST_DISCOVERY)
 
-    connection.once('error', () => this._reconnect())
-
     super({
       id,
       connection,
       stream
     })
 
+    this._handleDisconnected = () => {
+      this._reconnect()
+    }
     this.discoveryURL = discovery
 
-    this.on('disconnected', () => {
-      this._reconnect()
-    })
+    connection.once('error', this._handleDisconnected)
+    this.on('disconnected', this._handleDisconnected)
   }
 
-  _reconnect() {
+  _reconnect () {
     const connection = websocket(this.discoveryURL)
     this.reconnect(connection)
+  }
+
+  close (cb) {
+    this.removeListener('disconnected', this._handleDisconnected)
+    super.close(cb)
   }
 }
 
