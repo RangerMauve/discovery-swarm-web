@@ -140,7 +140,13 @@ class DiscoverySwarmStreamWebsocket extends DSS {
     const stream = opts.stream
     const id = opts.id
 
-    const connection = websocket(LOCALHOST_DISCOVERY)
+    let connection = null
+    try {
+      connection = websocket(LOCALHOST_DISCOVERY)
+    } catch(e) {
+      console.error('Error creating socket to local discovery server', e)
+      connection = websocket(discovery)
+    }
 
     super({
       id,
