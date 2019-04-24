@@ -2,7 +2,7 @@ const signalhubws = require('signalhubws')
 const webrtcSwarm = require('@geut/discovery-swarm-webrtc')
 const DSS = require('discovery-swarm-stream/client')
 const websocket = require('websocket-stream')
-const crypto = require('crypto')
+const randomBytes = require('randombytes')
 
 const EventEmitter = require('events')
 
@@ -23,7 +23,7 @@ module.exports = class DiscoverySwarmWeb extends EventEmitter {
     const signalhubURL = opts.signalhub || DEFAULT_SIGNALHUB
     const discoveryURL = opts.discovery || DEFAULT_DISCOVERY
 
-    const id = opts.id || crypto.randomBytes(32)
+    const id = opts.id || randomBytes(32)
     const stream = opts.stream
 
     this.id = id
