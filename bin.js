@@ -17,6 +17,8 @@ const page = `
 const argv = require('yargs').argv
 
 let port = argv.port || DEFAULT_PORT
+let defaultHash = argv.defaultHash
+let defaultHandshake = argv.defaultHandshake
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, {
@@ -26,6 +28,8 @@ const server = http.createServer((req, res) => {
 })
 
 DiscoverySwarmWebServer.createServer({
+  defaultHash,
+  defaultHandshake,
   server
 })
 

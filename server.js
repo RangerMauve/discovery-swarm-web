@@ -3,7 +3,7 @@ const websocket = require('websocket-stream')
 
 module.exports = {
   createServer (opts) {
-    const dss = new DSS({})
+    const dss = new DSS(opts)
 
     websocket.createServer(opts, (stream) => {
       dss.addClient(stream)
