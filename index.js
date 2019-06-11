@@ -1,3 +1,4 @@
+/* global self */
 const signalhubws = require('signalhubws')
 const webrtcSwarm = require('@geut/discovery-swarm-webrtc')
 const DSS = require('discovery-swarm-stream/client')
@@ -125,9 +126,9 @@ class DiscoverySwarmWeb extends EventEmitter {
 
   listen () {
     // Needed to mimic discovery-swarm behavior
-  	setTimeout(() => {
-  		this.emit('listening')
-  	}, 0)
+    setTimeout(() => {
+      this.emit('listening')
+    }, 0)
   }
 
   close (cb) {
@@ -150,7 +151,7 @@ class DiscoverySwarmStreamWebsocket extends DSS {
     let connection = null
     try {
       connection = websocket(LOCALHOST_DISCOVERY)
-    } catch(e) {
+    } catch (e) {
       console.error('Error creating socket to local discovery server', e)
       connection = websocket(discovery)
     }
