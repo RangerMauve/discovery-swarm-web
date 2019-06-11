@@ -125,7 +125,7 @@ class DiscoverySwarmWeb extends EventEmitter {
 
   listen () {
     // Needed to mimic discovery-swarm behavior
-  	setTimeout(() = > {
+  	setTimeout(() => {
   		this.emit('listening')
   	}, 0)
   }

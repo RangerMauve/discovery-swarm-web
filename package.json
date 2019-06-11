@@ -1,11 +1,12 @@
 {
   "name": "discovery-swarm-web",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Abstracts away discovery-swarm interaction with WebRTC and a websocket gateway.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-example": "browserify example/index.js > example/bundle.js"
+    "build-example": "browserify example/index.js > example/bundle.js",
+    "prepublish": "standard"
   },
   "bin": {
     "discovery-swarm-web": "bin.js"
@@ -40,6 +41,7 @@
   "devDependencies": {
     "browserify": "^16.2.3",
     "hyperdrive": "^9.14.2",
-    "random-access-memory": "^3.1.1"
+    "random-access-memory": "^3.1.1",
+    "standard": "^12.0.1"
   }
 }
