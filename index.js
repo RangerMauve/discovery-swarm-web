@@ -123,6 +123,13 @@ class DiscoverySwarmWeb extends EventEmitter {
     this.dss.leave(channelName, opts)
   }
 
+  listen () {
+    // Needed to mimic discovery-swarm behavior
+  	setTimeout(() = > {
+  		this.emit('listening')
+  	}, 0)
+  }
+
   close (cb) {
     this.dss.close(() => {
       this.webrtc.close(cb)
