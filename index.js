@@ -17,7 +17,7 @@ const SYNC_NET_DELAY = 5000
 // Check if the page was loaded from HTTPS
 const IS_SECURE = self.location.href.startsWith('https')
 
-module.exports = class DiscoverySwarmWeb extends EventEmitter {
+class DiscoverySwarmWeb extends EventEmitter {
   constructor (opts = {}) {
     super()
     const signalhubURL = opts.signalhub || DEFAULT_SIGNALHUB
@@ -173,6 +173,11 @@ class DiscoverySwarmStreamWebsocket extends DSS {
     super.close(cb)
   }
 }
+
+module.exports = (opts) => new DiscoverySwarmWeb(opts)
+
+module.exports.DiscoverySwarmWeb = DiscoverySwarmWeb
+module.exports.DiscoverySwarmStreamWebsocket = DiscoverySwarmStreamWebsocket
 
 function setSecure (url) {
   if (IS_SECURE) {
