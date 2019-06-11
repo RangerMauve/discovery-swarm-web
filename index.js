@@ -131,6 +131,12 @@ class DiscoverySwarmWeb extends EventEmitter {
     }, 0)
   }
 
+  address () {
+    return {
+      port: -1
+    }
+  }
+
   close (cb) {
     this.dss.close(() => {
       this.webrtc.close(cb)
