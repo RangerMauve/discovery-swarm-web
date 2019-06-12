@@ -168,22 +168,25 @@ class DiscoverySwarmStreamWebsocket extends DSS {
       stream
     })
 
+    this.connection = connection
+
     this._handleDisconnected = () => {
       this._reconnect()
     }
     this.discoveryURL = discovery
 
-    connection.once('error', this._handleDisconnected)
+    this.connection.once('error', this._handleDisconnected)
     this.on('disconnected', this._handleDisconnected)
   }
 
   _reconnect () {
-    const connection = websocket(this.discoveryURL)
-    this.reconnect(connection)
+    this.connection = websocket(this.discoveryURL)
+    this.reconnect(this.connection)
   }
 
   close (cb) {
     this.removeListener('disconnected', this._handleDisconnected)
+    this.connection = null
     super.close(cb)
   }
 }
