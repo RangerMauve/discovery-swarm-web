@@ -30,6 +30,7 @@
   "homepage": "https://github.com/RangerMauve/discovery-swarm-web#readme",
   "dependencies": {
     "@geut/discovery-swarm-webrtc": "github:geut/discovery-swarm-webrtc#sub-signalhub",
+    "debug": "^4.1.1",
     "discovery-swarm-stream": "^2.1.1",
     "hyperdiscovery": "^9.0.2",
     "length-prefixed-message": "^3.0.3",
