@@ -14,6 +14,8 @@ const APP_NAME = 'discovery-swarm-web'
 const DEFAULT_MAX_CONNECTIONS = Infinity
 const JOIN_DELAY = 2000
 const SYNC_NET_DELAY = 5000
+const LOCALHOST_WARNING = (discovery) => `Could not connect to local gateway at ${LOCALHOST_DISCOVERY}, trying remote gateway at ${discovery}.
+This isn't an error unless you're trying to use a local gateway. 😁`
 
 // Check if the page was loaded from HTTPS
 const IS_SECURE = self.location.href.startsWith('https')
@@ -113,15 +115,15 @@ class DiscoverySwarmWeb extends EventEmitter {
     this.on('connection', handleJoined)
   }
 
-  leave (channelName, opts = {}) {
+  leave (channelName) {
     const channelNameString = channelName.toString('hex')
 
     if (!this.channels.has(channelNameString)) return
 
     this.channels.delete(channelNameString)
 
-    this.webrtc.leave(channelName, opts)
-    this.dss.leave(channelName, opts)
+    this.webrtc.leave(channelName)
+    this.dss.leave(channelName)
   }
 
   listen () {
@@ -158,7 +160,7 @@ class DiscoverySwarmStreamWebsocket extends DSS {
     try {
       connection = websocket(LOCALHOST_DISCOVERY)
     } catch (e) {
-      console.error('Error creating socket to local discovery server', e)
+      console.warn(LOCALHOST_WARNING(discovery), e)
       connection = websocket(discovery)
     }
 
