@@ -4,9 +4,9 @@
   "description": "Abstracts away discovery-swarm interaction with WebRTC and a websocket gateway.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build-example": "browserify example/index.js > example/bundle.js",
-    "prepublish": "standard"
+    "test": "echo \"Error: no test specified\"",
+    "posttest": "standard",
+    "build-example": "browserify example/index.js > example/bundle.js"
   },
   "bin": {
     "discovery-swarm-web": "bin.js"
@@ -29,13 +29,12 @@
   },
   "homepage": "https://github.com/RangerMauve/discovery-swarm-web#readme",
   "dependencies": {
-    "@geut/discovery-swarm-webrtc": "github:geut/discovery-swarm-webrtc#sub-signalhub",
+    "@geut/discovery-swarm-webrtc": "^2.2.4",
     "debug": "^4.1.1",
     "discovery-swarm-stream": "^2.1.1",
     "hyperdiscovery": "^9.0.2",
     "length-prefixed-message": "^3.0.3",
     "randombytes": "^2.1.0",
-    "signalhubws": "^1.0.10",
     "websocket-stream": "^5.1.2",
     "yargs": "^13.2.2"
   },

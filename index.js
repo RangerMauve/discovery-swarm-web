@@ -1,5 +1,4 @@
 /* global self */
-const signalhubws = require('signalhubws')
 const webrtcSwarm = require('@geut/discovery-swarm-webrtc')
 const DSS = require('discovery-swarm-stream/client')
 const websocket = require('websocket-stream')
@@ -7,10 +6,9 @@ const randomBytes = require('randombytes')
 
 const EventEmitter = require('events')
 
-const DEFAULT_SIGNALHUB = ['wss://signalhubws.mauve.moe']
+const DEFAULT_BOOTSTRAP = ['https://geut-webrtc-signal.herokuapp.com/']
 const DEFAULT_DISCOVERY = 'wss://discoveryswarm.mauve.moe'
 const LOCALHOST_DISCOVERY = 'ws://localhost:3472'
-const APP_NAME = 'discovery-swarm-web'
 const DEFAULT_MAX_CONNECTIONS = Infinity
 const JOIN_DELAY = 2000
 const SYNC_NET_DELAY = 5000
@@ -20,10 +18,12 @@ This isn't an error unless you're trying to use a local gateway. 😁`
 // Check if the page was loaded from HTTPS
 const IS_SECURE = self.location.href.startsWith('https')
 
+const toBuffer = value => Buffer.isBuffer(value) ? value : Buffer.from(value)
+
 class DiscoverySwarmWeb extends EventEmitter {
   constructor (opts = {}) {
     super()
-    const signalhubURL = opts.signalhub || DEFAULT_SIGNALHUB
+    const bootstrapURL = opts.bootstrap || DEFAULT_BOOTSTRAP
     const discoveryURL = opts.discovery || DEFAULT_DISCOVERY
 
     const id = opts.id || randomBytes(32)
@@ -33,18 +33,12 @@ class DiscoverySwarmWeb extends EventEmitter {
     this.stream = stream
     this.maxConnections = opts.maxConnections || DEFAULT_MAX_CONNECTIONS
 
-    const isInstance = (typeof signalhubURL === 'object' && !Array.isArray(signalhubURL))
-    const hub = isInstance
-      ? signalhubURL : signalhubws(APP_NAME, signalhubURL.map(setSecure))
-
     this.channels = new Map()
 
-    this.hub = hub
-
     this.webrtc = webrtcSwarm({
-      id,
-      stream,
-      hub
+      id: toBuffer(id),
+      bootstrap: bootstrapURL,
+      stream
     })
 
     this.dss = new DiscoverySwarmStreamWebsocket({
@@ -87,13 +81,15 @@ class DiscoverySwarmWeb extends EventEmitter {
   }
 
   join (channelName, opts = {}) {
+    channelName = toBuffer(channelName)
+
     const channelNameString = channelName.toString('hex')
 
     if (this.channels.has(channelNameString)) return
 
     this.channels.set(channelNameString, 0)
 
-    this.webrtc.join(channelName, opts)
+    this.webrtc.join(channelName)
 
     const joinDSS = () => {
       if (!this.channels.has(channelNameString)) return
@@ -116,6 +112,8 @@ class DiscoverySwarmWeb extends EventEmitter {
   }
 
   leave (channelName) {
+    channelName = toBuffer(channelName)
+
     const channelNameString = channelName.toString('hex')
 
     if (!this.channels.has(channelNameString)) return

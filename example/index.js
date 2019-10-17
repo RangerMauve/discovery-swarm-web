@@ -1,4 +1,9 @@
-const DiscoverySwarmWeb = require('../')
+var path = require('path')
+
+// This is a dirty hack for browserify to work. 😅
+if (!path.posix) path.posix = path
+
+const discoverySwarmWeb = require('../')
 var hyperdrive = require('hyperdrive')
 var RAM = require('random-access-memory')
 
@@ -11,7 +16,7 @@ const archive = hyperdrive(RAM, ARCHIVE_KEY, {
 archive.ready(loadSwarm)
 
 function loadSwarm () {
-  const swarm = new DiscoverySwarmWeb({
+  const swarm = discoverySwarmWeb({
     stream: replicate
   })
 
